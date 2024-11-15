@@ -9,6 +9,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ansible==9.5.1
 <<<<<<< Updated upstream
 ansible-compat==4.1.11
@@ -81,4 +82,10 @@ ansible-lint==24.9.2
 <<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
+>>>>>>> Stashed changes
+=======
+ansible==10.6.0
+ansible-compat==24.10.0
+ansible-core==2.18.0
+ansible-lint==24.10.0
 >>>>>>> Stashed changes
