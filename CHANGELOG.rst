@@ -4,6 +4,25 @@ community.sap\_install Release Notes
 
 .. contents:: Topics
 
+v1.9.1
+======
+
+Release Summary
+---------------
+
+improvements and bug fixes
+
+Bugfixes
+--------
+
+- sap_general_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1183)
+- sap_ha_pacemaker_cluster - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1194)
+- sap_hana_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1185)
+- sap_hana_preconfigure/RHEL - Correctly set tsx in all cases (https://github.com/sap-linuxlab/community.sap_install/pull/1197)
+- sap_maintain_etc_hosts, sap_hana_install, sap_install_media_detect - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1191)
+- sap_netweaver_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1184)
+- sap_storage_setup, sap_hostagent, anydb - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1193)
+
 v1.9.0
 ======
 

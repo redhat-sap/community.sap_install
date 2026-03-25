@@ -417,3 +417,15 @@ releases:
         - sap_ha_pacemaker_cluster - (fix) align settings to HANA documentation (https://github.com/sap-linuxlab/community.sap_install/pull/1179)
         - sap_swpm - Rename all vars which contain '_swpm_swpm' (https://github.com/sap-linuxlab/community.sap_install/pull/1172)
         - sap_swpm - Only ensure the presence of the 'file' package on Suse (https://github.com/sap-linuxlab/community.sap_install/pull/1166)
+  1.9.1:
+    release_date: '2026-03-25'
+    changes:
+      release_summary: improvements and bug fixes
+      bugfixes:
+        - sap_general_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1183)
+        - sap_netweaver_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1184)
+        - sap_hana_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1185)
+        - sap_maintain_etc_hosts, sap_hana_install, sap_install_media_detect - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1191)
+        - sap_storage_setup, sap_hostagent, anydb - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1193)
+        - sap_ha_pacemaker_cluster - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1194)
+        - sap_hana_preconfigure/RHEL - Correctly set tsx in all cases (https://github.com/sap-linuxlab/community.sap_install/pull/1197)
