@@ -33,26 +33,26 @@
       register: __sap_hana_preconfigure_register_default_grub_cmdline_tsx_assert
       changed_when: false
 
-    - name: Assert that tsx=on is in GRUB_CMDLINE_LINUX in /etc/default/grub
+    - name: Assert that tsx=auto is in GRUB_CMDLINE_LINUX in /etc/default/grub
       ansible.builtin.assert:
-        that: "'tsx=on' in __sap_hana_preconfigure_register_default_grub_cmdline_tsx_assert.stdout"
-        fail_msg: "FAIL: 'tsx=on' is not in GRUB_CMDLINE_LINUX in /etc/default/grub!"
-        success_msg: "PASS: 'tsx=on' is in GRUB_CMDLINE_LINUX in /etc/default/grub."
+        that: "'tsx=auto' in __sap_hana_preconfigure_register_default_grub_cmdline_tsx_assert.stdout"
+        fail_msg: "FAIL: 'tsx=auto' is not in GRUB_CMDLINE_LINUX in /etc/default/grub!"
+        success_msg: "PASS: 'tsx=auto' is in GRUB_CMDLINE_LINUX in /etc/default/grub."
       ignore_errors: "{{ sap_hana_preconfigure_assert_ignore_errors | d(false) }}"
       when: __sap_hana_preconfigure_register_lscpu_flags.stdout is not regex("^Flags:.*\s*rtm\s*.*")
 
-    - name: Report if tsx=on is in GRUB_CMDLINE_LINUX in /etc/default/grub
+    - name: Report if tsx=auto is in GRUB_CMDLINE_LINUX in /etc/default/grub
       ansible.builtin.debug:
-        msg: "INFO: 'tsx=on' is in GRUB_CMDLINE_LINUX in /etc/default/grub."
+        msg: "INFO: 'tsx=auto' is in GRUB_CMDLINE_LINUX in /etc/default/grub."
       when:
-        - "'tsx=on' in __sap_hana_preconfigure_register_default_grub_cmdline_tsx_assert.stdout"
+        - "'tsx=auto' in __sap_hana_preconfigure_register_default_grub_cmdline_tsx_assert.stdout"
         - __sap_hana_preconfigure_register_lscpu_flags.stdout is regex("^Flags:.*\s*rtm\s*.*")
 
-    - name: Report if tsx=on is not in GRUB_CMDLINE_LINUX in /etc/default/grub
+    - name: Report if tsx=auto is not in GRUB_CMDLINE_LINUX in /etc/default/grub
       ansible.builtin.debug:
-        msg: "INFO: 'tsx=on' is not in GRUB_CMDLINE_LINUX in /etc/default/grub."
+        msg: "INFO: 'tsx=auto' is not in GRUB_CMDLINE_LINUX in /etc/default/grub."
       when:
-        - "'tsx=on' not in __sap_hana_preconfigure_register_default_grub_cmdline_tsx_assert.stdout"
+        - "'tsx=auto' not in __sap_hana_preconfigure_register_default_grub_cmdline_tsx_assert.stdout"
         - __sap_hana_preconfigure_register_lscpu_flags.stdout is regex("^Flags:.*\s*rtm\s*.*")
 
     - name: TSX - Get contents of /proc/cmdline
@@ -60,24 +60,24 @@
       register: __sap_hana_preconfigure_register_proc_cmdline_tsx_assert
       changed_when: false
 
-    - name: Assert that tsx=on is in /proc/cmdline
+    - name: Assert that tsx=auto is in /proc/cmdline
       ansible.builtin.assert:
-        that: "'tsx=on' in __sap_hana_preconfigure_register_proc_cmdline_tsx_assert.stdout"
-        fail_msg: "FAIL: 'tsx=on' is not in /proc/cmdline!"
-        success_msg: "PASS: 'tsx=on' is in /proc/cmdline."
+        that: "'tsx=auto' in __sap_hana_preconfigure_register_proc_cmdline_tsx_assert.stdout"
+        fail_msg: "FAIL: 'tsx=auto' is not in /proc/cmdline!"
+        success_msg: "PASS: 'tsx=auto' is in /proc/cmdline."
       ignore_errors: "{{ sap_hana_preconfigure_assert_ignore_errors | d(false) }}"
       when: __sap_hana_preconfigure_register_lscpu_flags.stdout is not regex("^Flags:.*\s*rtm\s*.*")
 
-    - name: Report if tsx=on is in /proc/cmdline
+    - name: Report if tsx=auto is in /proc/cmdline
       ansible.builtin.debug:
-        msg: "INFO: 'tsx=on' is in /proc/cmdline."
+        msg: "INFO: 'tsx=auto' is in /proc/cmdline."
       when:
-        - "'tsx=on' in __sap_hana_preconfigure_register_proc_cmdline_tsx_assert.stdout"
+        - "'tsx=auto' in __sap_hana_preconfigure_register_proc_cmdline_tsx_assert.stdout"
         - __sap_hana_preconfigure_register_lscpu_flags.stdout is regex("^Flags:.*\s*rtm\s*.*")
 
-    - name: Report if tsx=on is not in /proc/cmdline
+    - name: Report if tsx=auto is not in /proc/cmdline
       ansible.builtin.debug:
-        msg: "INFO: 'tsx=on' is not in /proc/cmdline."
+        msg: "INFO: 'tsx=auto' is not in /proc/cmdline."
       when:
-        - "'tsx=on' not in __sap_hana_preconfigure_register_proc_cmdline_tsx_assert.stdout"
+        - "'tsx=auto' not in __sap_hana_preconfigure_register_proc_cmdline_tsx_assert.stdout"
         - __sap_hana_preconfigure_register_lscpu_flags.stdout is regex("^Flags:.*\s*rtm\s*.*")
