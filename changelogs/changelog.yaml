@@ -421,7 +421,7 @@ releases:
     release_date: '2026-03-25'
     changes:
       release_summary: improvements and bug fixes
-      minor_changes:
+      bugfixes:
         - sap_general_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1183)
         - sap_netweaver_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1184)
         - sap_hana_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1185)

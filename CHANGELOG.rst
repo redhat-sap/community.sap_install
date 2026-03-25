@@ -12,8 +12,8 @@ Release Summary
 
 improvements and bug fixes
 
-Minor Changes
--------------
+Bugfixes
+--------
 
 - sap_general_preconfigure - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1183)
 - sap_ha_pacemaker_cluster - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1194)
