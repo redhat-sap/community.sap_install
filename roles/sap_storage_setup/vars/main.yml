@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: Apache-2.0
+---
+
+# List of directories that must never be used as mount points for NFS filesystems,
+# to avoid critical operating system failures.
+__sap_storage_setup_nfs_forbidden_paths:
+  #  Standard Root Filesystem Hierarchy
+  - ''
+  - '/'
+  - '/bin'
+  - '/boot'
+  - '/dev'
+  - '/etc'
+  - '/lib'
+  - '/lib64'
+  - '/proc'
+  - '/root'
+  - '/sbin'
+  - '/sys'
+  - '/tmp'
+  - '/var'
+  - '/var/tmp'
+
+  # UsrMerge Hierarchy (e.g. SLES 16)
+  - '/usr'
+  - '/usr/bin'
+  - '/usr/etc'
+  - '/usr/lib'
+  - '/usr/lib64'
+  - '/usr/local'
+  - '/usr/sbin'
