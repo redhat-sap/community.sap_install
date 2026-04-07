@@ -91,6 +91,15 @@
           }
         ]) %}
 
+      {%- set forbidden_paths = ['', '/', '/etc', '/bin', '/boot', '/dev', '/proc', '/sys', '/root', '/var'] -%}
+      {%- elif nfs_item.mountpoint | regex_replace('/$', '') not in forbidden_paths -%}
+        {%- set add_software = mount_list.extend([
+          {
+            'mount_src': nfs_item.nfs_path | regex_replace('/$', ''),
+            'mountpoint': nfs_item.mountpoint | regex_replace('/$', ''),
+          }
+        ]) %}
+
       {%- endif %}
       {{ mount_list }}
 
@@ -104,6 +113,26 @@
       {%- else -%}
         {{ sap_storage_setup_host_type }}
       {%- endif %}
+
+
+- name: SAP Storage Setup - Inform that non-SAP mount points were found
+  ansible.builtin.debug:
+    msg: |
+      INFO: Non-SAP specific mount point was detected: {{ __non_sap_mounts[0] }}
+      The mount point will be mounted, but no SAP specific subdirectories will be created.
+  vars:
+    # List of expected SAP mounts based on task above.
+    __sap_mount_regex: "^(/sapmnt|/usr/sap/trans|/lss/shared|/hana/.*|/software)$"
+
+    __non_sap_mounts: >-
+      {{ __sap_storage_setup_fact_related_directories
+         | rejectattr('mountpoint', 'search', __sap_mount_regex)
+         | map(attribute='mountpoint')
+         | list }}
+  when:
+    # Only run this if the list wasn't expanded (ignoring the complex /usr/sap logic)
+    - __sap_storage_setup_fact_related_directories | length == 1
+    - __non_sap_mounts | length > 0
 
 
 # Put temporary tasks inside a block which will make sure
