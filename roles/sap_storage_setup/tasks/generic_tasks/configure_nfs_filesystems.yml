@@ -76,7 +76,7 @@
         {%- endfor %}
 
       {%- elif clean_mountpoint not in __sap_storage_setup_nfs_forbidden_paths -%}
-        {%- set add_software = mount_list.extend([
+        {%- set add_other_nfs = mount_list.extend([
           {
             'mount_src': clean_mount_src,
             'mountpoint': clean_mountpoint,
