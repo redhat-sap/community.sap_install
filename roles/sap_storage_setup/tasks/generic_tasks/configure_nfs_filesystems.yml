@@ -32,62 +32,54 @@
 #   - mount_src: /my_dir/usr/sap/DB1/ASCS00
 #     mountpoint: /usr/sap/DB1/ASCS00
 
+# This task creates list of mount points and related directories to be created on the NFS share.
+# Generic mount point elif also covers SAP specific mount points: '/usr/sap/trans', '/hana/*', '/lss/shared'.
+# Resulting list length can be:
+# - 0 if mount point is in the forbidden paths list.
+# - 1 if a valid mount point was defined, SAP or non-SAP specific.
+# - 1+ if /usr/sap was defined and multiple subdirectories were created based on the host type.
 - name: SAP Storage Setup - ({{ nfs_item.name }}) Set fact for directories
   ansible.builtin.set_fact:
     __sap_storage_setup_fact_related_directories: |
       {% set mount_list = [] %}
+      {%- set clean_mount_src = nfs_item.nfs_path | regex_replace('/$', '') -%}
+      {%- set clean_mountpoint = nfs_item.mountpoint | regex_replace('/$', '') -%}
 
-      {%- if nfs_item.mountpoint | regex_replace('/$', '') == '/sapmnt' -%}
+      {%- if clean_mountpoint == '/sapmnt' -%}
         {%- set add_sapmnt = mount_list.extend([
           {
-            'mount_src': nfs_item.nfs_path | regex_replace('/$', ''),
-            'mountpoint': nfs_item.mountpoint | regex_replace('/$', ''),
+            'mount_src': clean_mount_src,
+            'mountpoint': clean_mountpoint,
             'dir_only': '/' + sap_storage_setup_sid,
           }
         ]) %}
 
-      {%- elif nfs_item.mountpoint | regex_replace('/$', '') == '/usr/sap/trans' %}
-        {%- set add_trans = mount_list.extend([
-          {
-            'mount_src': nfs_item.nfs_path | regex_replace('/$', ''),
-            'mountpoint': nfs_item.mountpoint | regex_replace('/$', ''),
-          }
-        ]) %}
-
-      {%- elif nfs_item.mountpoint | regex_replace('/$', '') == '/usr/sap' -%}
+      {%- elif clean_mountpoint == '/usr/sap' -%}
         {%- for common in sap_storage_setup_nfs_dirs_usr_sap.all %}
           {%- set add_all_usrsap = mount_list.extend([
             {
-             'mount_src': nfs_item.nfs_path | regex_replace('/$', '') + '/' + common,
-             'mountpoint': nfs_item.mountpoint | regex_replace('/$', '') + '/' + common,
+             'mount_src': clean_mount_src + '/' + common,
+             'mountpoint': clean_mountpoint + '/' + common,
             }
           ]) %}
         {%- endfor %}
 
         {%- for type in host_type %}
-          {%- for dir in sap_storage_setup_nfs_dirs_usr_sap[type] %}
+          {%- for dir in sap_storage_setup_nfs_dirs_usr_sap[type] | d([]) %}
             {%- set dirs = mount_list.extend([
               {
-                'mount_src': nfs_item.nfs_path | regex_replace('/$', '') + '/' + dir,
-                'mountpoint': nfs_item.mountpoint | regex_replace('/$', '') + '/' + dir,
+                'mount_src': clean_mount_src + '/' + dir,
+                'mountpoint': clean_mountpoint + '/' + dir,
               }
             ]) %}
           {%- endfor %}
         {%- endfor %}
 
-      {%- elif nfs_item.mountpoint.startswith('/hana/') %}
-        {%- set add_hana = mount_list.extend([
+      {%- elif clean_mountpoint not in __sap_storage_setup_nfs_forbidden_paths -%}
+        {%- set add_other_nfs = mount_list.extend([
           {
-            'mount_src': nfs_item.nfs_path | regex_replace('/$', ''),
-            'mountpoint': nfs_item.mountpoint | regex_replace('/$', ''),
-          }
-        ]) %}
-
-      {%- elif nfs_item.mountpoint | regex_replace('/$', '') == '/software' -%}
-        {%- set add_software = mount_list.extend([
-          {
-            'mount_src': nfs_item.nfs_path | regex_replace('/$', ''),
-            'mountpoint': nfs_item.mountpoint | regex_replace('/$', ''),
+            'mount_src': clean_mount_src,
+            'mountpoint': clean_mountpoint,
           }
         ]) %}
 
@@ -106,6 +98,36 @@
       {%- endif %}
 
 
+- name: SAP Storage Setup - Inform that no valid mount points were found
+  ansible.builtin.debug:
+    msg: >
+      WARN: Provided NFS mount point '{{ nfs_item.mountpoint }}' will be skipped, because it is in the forbidden paths list:
+      {{ __sap_storage_setup_nfs_forbidden_paths | map('quote') | join(', ') }}.
+  when:
+    # Only run this if the list is empty.
+    - __sap_storage_setup_fact_related_directories | length == 0
+
+
+- name: SAP Storage Setup - Inform that non-SAP mount points were found
+  ansible.builtin.debug:
+    msg: |
+      INFO: Non-SAP specific mount point was detected: {{ __non_sap_mounts[0] }}
+      The mount point will be mounted, but no SAP specific subdirectories will be created.
+  vars:
+    # List of expected SAP mounts based on task above.
+    __sap_mount_regex: "^(/sapmnt|/usr/sap/trans|/lss/shared|/hana/.*|/software)$"
+
+    __non_sap_mounts: >-
+      {{ __sap_storage_setup_fact_related_directories
+         | rejectattr('mountpoint', 'search', __sap_mount_regex)
+         | map(attribute='mountpoint')
+         | list }}
+  when:
+    # Only run this if the list wasn't expanded (ignoring the complex /usr/sap logic)
+    - __sap_storage_setup_fact_related_directories | length == 1
+    - __non_sap_mounts | length > 0
+
+
 # Put temporary tasks inside a block which will make sure
 # that even in case of failure the temporary mountpoint will be removed
 - name: SAP Storage Setup - Temporary steps for NFS directory structure
@@ -113,6 +135,8 @@
   # Stop execution of tasks after this block for any host, if one host
   # failed a task in this block.
   any_errors_fatal: true
+  # Don't execute temporary mount tasks if there is no valid NFS mount point.
+  when: __sap_storage_setup_fact_related_directories | length > 0
   block:
 
     - name: SAP Storage Setup - ({{ nfs_item.name }}) Create directory as temporary mountpoint
