@@ -429,3 +429,11 @@ releases:
         - sap_storage_setup, sap_hostagent, anydb - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1193)
         - sap_ha_pacemaker_cluster - Ansible 2.24 compatibility (https://github.com/sap-linuxlab/community.sap_install/pull/1194)
         - sap_hana_preconfigure/RHEL - Correctly set tsx in all cases (https://github.com/sap-linuxlab/community.sap_install/pull/1197)
+  1.9.2:
+    release_date: '2026-04-13'
+    changes:
+      release_summary: improvements and bug fixes
+      bugfixes:
+        - sap_swpm - Remove ansible.posix dependency (https://github.com/sap-linuxlab/community.sap_install/pull/1202)
+        - sap_ha_pacemaker_cluster - Fix issue 1203 sudo dash (https://github.com/sap-linuxlab/community.sap_install/pull/1204)
+        - sap_storage_setup - Add option to mount generic NFS mounts (https://github.com/sap-linuxlab/community.sap_install/pull/1205)
