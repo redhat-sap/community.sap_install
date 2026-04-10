@@ -4,6 +4,21 @@ community.sap\_install Release Notes
 
 .. contents:: Topics
 
+v1.9.2
+======
+
+Release Summary
+---------------
+
+improvements and bug fixes
+
+Bugfixes
+--------
+
+- sap_ha_pacemaker_cluster - Fix issue 1203 sudo dash (https://github.com/sap-linuxlab/community.sap_install/pull/1204)
+- sap_storage_setup - Add option to mount generic NFS mounts (https://github.com/sap-linuxlab/community.sap_install/pull/1205)
+- sap_swpm - Remove ansible.posix dependency (https://github.com/sap-linuxlab/community.sap_install/pull/1202)
+
 v1.9.1
 ======
 
